@@ -1,35 +1,30 @@
-package com.fln.mangadex.pages
+package com.fln.mangadex.features.more
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Help
 import androidx.compose.material.icons.automirrored.rounded.Label
-import androidx.compose.material.icons.rounded.CloudOff
-import androidx.compose.material.icons.rounded.Download
-import androidx.compose.material.icons.rounded.HistoryToggleOff
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.QueryStats
-import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material.icons.rounded.SettingsBackupRestore
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.fln.mangadex.R
+import com.fln.mangadex.common.LocalNavigation
 
 @Composable
 fun MorePage() {
+  val rootNavigator = LocalNavigation.current.root!!
+
   Scaffold {
     MaterialTheme.colorScheme
     val screenSize: Pair<Dp, Dp> =
@@ -86,6 +81,7 @@ fun MorePage() {
       item { HorizontalDivider() }
       item {
         ListItem(
+          modifier = Modifier.clickable { rootNavigator.navigate("settings") },
           leadingContent = { Icon(Icons.Rounded.Settings, null) },
           headlineContent = { Text("Settings") })
       }
