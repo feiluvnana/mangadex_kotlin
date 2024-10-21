@@ -2,6 +2,8 @@ plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.kotlin.serialization)
+  id("kotlin-kapt")
+  id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -53,4 +55,11 @@ dependencies {
   implementation(libs.androidx.navigation.compose)
   implementation(libs.androidx.material.icons.extended)
   implementation(libs.kotlinx.serialization.json)
+  implementation(libs.androidx.datastore.preferences)
+  implementation(libs.androidx.lifecycle.livedata.ktx)
+  implementation(libs.hilt.android)
+  kapt(libs.hilt.android.compiler)
+  implementation(libs.androidx.hilt.navigation.compose)
 }
+
+kapt { correctErrorTypes = true }

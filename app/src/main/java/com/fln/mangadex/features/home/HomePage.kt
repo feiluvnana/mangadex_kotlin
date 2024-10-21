@@ -14,10 +14,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.fln.mangadex.common.LocalNavigation
-import com.fln.mangadex.features.HistoryPage
-import com.fln.mangadex.features.LibraryPage
-import com.fln.mangadex.features.UpdatesPage
+import com.fln.mangadex.features.history.HistoryPage
+import com.fln.mangadex.features.library.LibraryPage
 import com.fln.mangadex.features.more.MorePage
+import com.fln.mangadex.features.updates.UpdatesPage
 
 @Composable
 fun HomePage() {

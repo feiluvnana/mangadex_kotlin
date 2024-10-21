@@ -1,4 +1,4 @@
-package com.fln.mangadex.features.more.settings
+package com.fln.mangadex.features.settings
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text

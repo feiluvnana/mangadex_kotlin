@@ -1,10 +1,10 @@
-package com.fln.mangadex.features
+package com.fln.mangadex.features.history
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun LibraryPage() {
-  Box { Text("Library Page") }
+fun HistoryPage() {
+  Box { Text("History Page") }
 }
