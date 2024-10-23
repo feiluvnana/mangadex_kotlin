@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.fln.mangadex.common.LocalNavigation
+import com.fln.mangadex.GlobalValuesProvider
 import com.fln.mangadex.features.history.HistoryPage
 import com.fln.mangadex.features.library.LibraryPage
 import com.fln.mangadex.features.more.MorePage
@@ -21,7 +21,7 @@ import com.fln.mangadex.features.updates.UpdatesPage
 
 @Composable
 fun HomePage() {
-  val homeNavigator = LocalNavigation.current.home!!
+  val homeNavigator = GlobalValuesProvider.current.homeNavigator!!
 
   Scaffold(
     modifier = Modifier.fillMaxSize(),
@@ -34,32 +34,38 @@ fun HomePage() {
           selected = route == "library",
           onClick = { homeNavigator.navigate("library") },
           icon = { Icon(Icons.Rounded.Book, null) },
-          label = { Text("Library") })
+          label = { Text("Library") },
+        )
         NavigationBarItem(
           selected = route == "updates",
           onClick = { homeNavigator.navigate("updates") },
           icon = { Icon(Icons.Rounded.Update, null) },
-          label = { Text("Updates") })
+          label = { Text("Updates") },
+        )
         NavigationBarItem(
           selected = route == "history",
           onClick = { homeNavigator.navigate("history") },
           icon = { Icon(Icons.Rounded.History, null) },
-          label = { Text("History") })
+          label = { Text("History") },
+        )
         NavigationBarItem(
           selected = route == "more",
           onClick = { homeNavigator.navigate("more") },
           icon = { Icon(Icons.Rounded.MoreHoriz, null) },
-          label = { Text("More") })
+          label = { Text("More") },
+        )
       }
-    }) {
-      NavHost(
-        navController = homeNavigator,
-        startDestination = "library",
-        modifier = Modifier.padding(it)) {
-          composable("library") { LibraryPage() }
-          composable("updates") { UpdatesPage() }
-          composable("history") { HistoryPage() }
-          composable("more") { MorePage() }
-        }
+    },
+  ) {
+    NavHost(
+      navController = homeNavigator,
+      startDestination = "library",
+      modifier = Modifier.padding(it),
+    ) {
+      composable("library") { LibraryPage() }
+      composable("updates") { UpdatesPage() }
+      composable("history") { HistoryPage() }
+      composable("more") { MorePage() }
     }
+  }
 }
