@@ -1,27 +1,20 @@
-package com.fln.mangadex.features.home
+package com.fln.mangadex.views.home
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Book
-import androidx.compose.material.icons.rounded.History
-import androidx.compose.material.icons.rounded.MoreHoriz
-import androidx.compose.material.icons.rounded.Update
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.fln.mangadex.GlobalValuesProvider
-import com.fln.mangadex.features.history.HistoryPage
-import com.fln.mangadex.features.library.LibraryPage
-import com.fln.mangadex.features.more.MorePage
-import com.fln.mangadex.features.updates.UpdatesPage
+import androidx.navigation.compose.*
+import com.fln.mangadex.LocalValuesProvider
 
 @Composable
 fun HomePage() {
-  val homeNavigator = GlobalValuesProvider.current.homeNavigator!!
+  val homeNavigator = LocalValuesProvider.current.homeNavigator!!
 
   Scaffold(
     modifier = Modifier.fillMaxSize(),
@@ -57,11 +50,13 @@ fun HomePage() {
       }
     },
   ) {
-    NavHost(
-      navController = homeNavigator,
+    NavHost(navController = homeNavigator,
       startDestination = "library",
       modifier = Modifier.padding(it),
-    ) {
+      enterTransition = { EnterTransition.None },
+      exitTransition = { ExitTransition.None },
+      popEnterTransition = { EnterTransition.None },
+      popExitTransition = { ExitTransition.None }) {
       composable("library") { LibraryPage() }
       composable("updates") { UpdatesPage() }
       composable("history") { HistoryPage() }
