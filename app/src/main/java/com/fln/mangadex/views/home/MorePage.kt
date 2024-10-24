@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 @Preview
 @Composable
 fun MorePage(moreViewModel: MoreViewModel = hiltViewModel()) {
-  val rootNavigator = LocalValuesProvider.current.rootNavigator!!
+  val rootNavigator = LocalValuesProvider.current.rootNavigator
   val moreState by moreViewModel.state.collectAsState()
   val coroutineScope = rememberCoroutineScope()
 
@@ -52,118 +52,83 @@ fun MorePage(moreViewModel: MoreViewModel = hiltViewModel()) {
       }
       item { HorizontalDivider() }
       item {
-        ListItem(
-          modifier = Modifier.padding(top = 8.dp),
-          leadingContent = {
-            Icon(Icons.Rounded.CloudOff,
-              null,
-              tint = MaterialTheme.colorScheme.primary)
-          },
-          headlineContent = {
-            Text("Downloaded only",
-              fontSize = 14.sp,
-              fontWeight = FontWeight.SemiBold)
-          },
-          supportingContent = {
-            Text("Filter all entries in your library", fontSize = 12.sp)
-          },
-          trailingContent = {
-            Switch(
-              checked = moreState.downloadedOnly,
-              onCheckedChange = {
-                coroutineScope.launch { moreViewModel.toggleDownloadedOnly() }
-              },
-            )
-          },
-        )
+        ListItem(modifier = Modifier.padding(top = 8.dp), leadingContent = {
+          Icon(Icons.Rounded.CloudOff,
+            null,
+            tint = MaterialTheme.colorScheme.primary)
+        }, headlineContent = {
+          Text("Downloaded only",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold)
+        }, supportingContent = {
+          Text("Filter all entries in your library", fontSize = 12.sp)
+        }, trailingContent = {
+          Switch(checked = moreState.downloadedOnly, onCheckedChange = {
+            coroutineScope.launch { moreViewModel.toggleDownloadedOnly() }
+          })
+        })
       }
       item {
-        ListItem(
-          modifier = Modifier.padding(bottom = 8.dp),
-          leadingContent = {
-            Icon(Icons.Rounded.HistoryToggleOff,
-              null,
-              tint = MaterialTheme.colorScheme.primary)
-          },
-          headlineContent = {
-            Text("Incognito mode",
-              fontSize = 14.sp,
-              fontWeight = FontWeight.SemiBold)
-          },
-          supportingContent = {
-            Text("Pauses reading history", fontSize = 12.sp)
-          },
-          trailingContent = {
-            Switch(
-              checked = moreState.incognitoMode,
-              onCheckedChange = {
-                coroutineScope.launch { moreViewModel.toggleIncognitoMode() }
-              },
-            )
-          },
-        )
+        ListItem(modifier = Modifier.padding(bottom = 8.dp), leadingContent = {
+          Icon(Icons.Rounded.HistoryToggleOff,
+            null,
+            tint = MaterialTheme.colorScheme.primary)
+        }, headlineContent = {
+          Text("Incognito mode",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold)
+        }, supportingContent = {
+          Text("Pauses reading history", fontSize = 12.sp)
+        }, trailingContent = {
+          Switch(checked = moreState.incognitoMode, onCheckedChange = {
+            coroutineScope.launch { moreViewModel.toggleIncognitoMode() }
+          })
+        })
       }
       item { HorizontalDivider() }
       item {
-        ListItem(
-          leadingContent = {
-            Icon(Icons.Rounded.Download,
-              null,
-              tint = MaterialTheme.colorScheme.primary)
-          },
-          headlineContent = {
-            Text("Download queue",
-              fontSize = 14.sp,
-              fontWeight = FontWeight.SemiBold)
-          },
-        )
+        ListItem(leadingContent = {
+          Icon(Icons.Rounded.Download,
+            null,
+            tint = MaterialTheme.colorScheme.primary)
+        }, headlineContent = {
+          Text("Download queue",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold)
+        })
       }
       item {
-        ListItem(
-          leadingContent = {
-            Icon(Icons.AutoMirrored.Rounded.Label,
-              null,
-              tint = MaterialTheme.colorScheme.primary)
-          },
-          headlineContent = {
-            Text("Categories",
-              fontSize = 14.sp,
-              fontWeight = FontWeight.SemiBold)
-          },
-        )
+        ListItem(leadingContent = {
+          Icon(Icons.AutoMirrored.Rounded.Label,
+            null,
+            tint = MaterialTheme.colorScheme.primary)
+        }, headlineContent = {
+          Text("Categories", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+        })
       }
       item {
-        ListItem(
-          leadingContent = {
-            Icon(Icons.Rounded.QueryStats,
-              null,
-              tint = MaterialTheme.colorScheme.primary)
-          },
-          headlineContent = {
-            Text("Statistics",
-              fontSize = 14.sp,
-              fontWeight = FontWeight.SemiBold)
-          },
-        )
+        ListItem(leadingContent = {
+          Icon(Icons.Rounded.QueryStats,
+            null,
+            tint = MaterialTheme.colorScheme.primary)
+        }, headlineContent = {
+          Text("Statistics", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+        })
       }
       item {
-        ListItem(
-          leadingContent = {
-            Icon(Icons.Rounded.SettingsBackupRestore,
-              null,
-              tint = MaterialTheme.colorScheme.primary)
-          },
-          headlineContent = {
-            Text("Backup and restore",
-              fontSize = 14.sp,
-              fontWeight = FontWeight.SemiBold)
-          },
-        )
+        ListItem(leadingContent = {
+          Icon(Icons.Rounded.SettingsBackupRestore,
+            null,
+            tint = MaterialTheme.colorScheme.primary)
+        }, headlineContent = {
+          Text("Backup and restore",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold)
+        })
       }
       item { HorizontalDivider() }
       item {
-        ListItem(
-          modifier = Modifier.clickable { rootNavigator.navigate("settings") },
+        ListItem(modifier = Modifier.clickable { rootNavigator.navigate("settings") },
           leadingContent = {
             Icon(Icons.Rounded.Settings,
               null,
@@ -171,32 +136,25 @@ fun MorePage(moreViewModel: MoreViewModel = hiltViewModel()) {
           },
           headlineContent = {
             Text("Settings", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-          },
-        )
+          })
       }
       item {
-        ListItem(
-          leadingContent = {
-            Icon(Icons.Rounded.Info,
-              null,
-              tint = MaterialTheme.colorScheme.primary)
-          },
-          headlineContent = {
-            Text("About", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-          },
-        )
+        ListItem(leadingContent = {
+          Icon(Icons.Rounded.Info,
+            null,
+            tint = MaterialTheme.colorScheme.primary)
+        }, headlineContent = {
+          Text("About", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+        })
       }
       item {
-        ListItem(
-          leadingContent = {
-            Icon(Icons.AutoMirrored.Rounded.Help,
-              null,
-              tint = MaterialTheme.colorScheme.primary)
-          },
-          headlineContent = {
-            Text("Help", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-          },
-        )
+        ListItem(leadingContent = {
+          Icon(Icons.AutoMirrored.Rounded.Help,
+            null,
+            tint = MaterialTheme.colorScheme.primary)
+        }, headlineContent = {
+          Text("Help", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+        })
       }
     }
   }

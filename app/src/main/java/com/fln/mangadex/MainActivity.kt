@@ -28,12 +28,11 @@ import com.fln.mangadex.views.settings.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @SuppressLint("CompositionLocalNaming")
-val LocalValuesProvider = compositionLocalOf { LocalValues() }
+val LocalValuesProvider =
+  compositionLocalOf<LocalValues> { error("No navController provided") }
 
-data class LocalValues(
-  val rootNavigator: NavHostController? = null,
-  val homeNavigator: NavHostController? = null,
-)
+data class LocalValues(val rootNavigator: NavHostController,
+                       val homeNavigator: NavHostController)
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -57,6 +56,7 @@ class MainActivity : ComponentActivity() {
           enableEdgeToEdge(statusBarStyle = if (moreState.downloadedOnly || moreState.incognitoMode) SystemBarStyle.light(
             Color.TRANSPARENT,
             Color.TRANSPARENT) else SystemBarStyle.dark(Color.TRANSPARENT))
+          if(moreState.secureScreen)
         }
       }
 
@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.BottomCenter))
             }
-            NavHost(navController = LocalValuesProvider.current.rootNavigator!!,
+            NavHost(navController = LocalValuesProvider.current.rootNavigator,
               startDestination = "home",
               enterTransition = { EnterTransition.None },
               exitTransition = { ExitTransition.None },
