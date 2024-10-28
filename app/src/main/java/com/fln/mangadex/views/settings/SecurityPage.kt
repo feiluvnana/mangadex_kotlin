@@ -38,7 +38,13 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
     LazyColumn(modifier = Modifier.padding(innerPadding)) {
       item {
         ListItem(headlineContent = { Text("Require unlock", fontSize = 14.sp) },
-          trailingContent = { Switch(checked = true, onCheckedChange = {}) })
+          trailingContent = {
+            Switch(checked = true, onCheckedChange = {
+              //moreViewModel.biometricRepository.biometricPrompt.authenticate(
+              //  moreViewModel.biometricRepository.biometricPromptInfo
+              //)
+            })
+          })
       }
       item {
         ListItem(headlineContent = { Text("Lock when idle", fontSize = 14.sp) },

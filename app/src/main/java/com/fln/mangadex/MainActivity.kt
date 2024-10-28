@@ -5,17 +5,18 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.activity.*
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.biometric.BiometricPrompt
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,18 +25,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.fln.mangadex.core.models.SecureScreenMode
+import com.fln.mangadex.core.repositories.auth.BiometricRepository
 import com.fln.mangadex.theme.AppTheme
 import com.fln.mangadex.viewmodels.MoreViewModel
 import com.fln.mangadex.views.home.HomePage
 import com.fln.mangadex.views.settings.*
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @SuppressLint("CompositionLocalNaming")
 val LocalValuesProvider =
@@ -48,6 +49,10 @@ data class LocalValues(
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
+
+  @Inject
+  lateinit var biometricRepository: BiometricRepository
+
   @RequiresApi(Build.VERSION_CODES.P)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -58,12 +63,7 @@ class MainActivity : FragmentActivity() {
       val moreViewModel: MoreViewModel = hiltViewModel()
       val moreState by moreViewModel.state.collectAsStateWithLifecycle()
       val lifecycleOwner = LocalLifecycleOwner.current
-      val biometricPrompt = BiometricPrompt(
-        this as FragmentActivity,
-        object : BiometricPrompt.AuthenticationCallback() {})
-      val biometricPromptInfo =
-        BiometricPrompt.PromptInfo.Builder().setTitle("Require unlock")
-          .setSubtitle("Authenticate to confirm change").build()
+
 
       val downloadedOnlyDp by animateDpAsState(
         targetValue = if (moreState.downloadedOnly) 50.dp else 0.dp,
@@ -75,20 +75,6 @@ class MainActivity : FragmentActivity() {
         animationSpec = tween(250),
         label = "incognitoModeDp"
       )
-
-      DisposableEffect(listOf(lifecycleOwner, moreState)) {
-        val observer = LifecycleEventObserver { source, event ->
-          when (event) {
-            Lifecycle.Event.ON_RESUME -> {
-              biometricPrompt.authenticate(biometricPromptInfo)
-            }
-
-            else -> {}
-          }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-      }
 
       LaunchedEffect(true) {
         moreViewModel.state.collect {

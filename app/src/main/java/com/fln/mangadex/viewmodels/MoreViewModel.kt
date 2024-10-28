@@ -18,7 +18,9 @@ data class MoreState(
 
 @HiltViewModel
 class MoreViewModel
-@Inject constructor(private val datastoreService: DatastoreRepository) :
+@Inject constructor(
+  private val datastoreService: DatastoreRepository
+) :
   ViewModel() {
   private val _state = MutableStateFlow(
     MoreState(
