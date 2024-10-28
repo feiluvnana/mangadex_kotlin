@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fln.mangadex.LocalValuesProvider
@@ -25,7 +24,6 @@ import com.fln.mangadex.viewmodels.MoreViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Preview
 @Composable
 fun MorePage(moreViewModel: MoreViewModel = hiltViewModel()) {
   val rootNavigator = LocalValuesProvider.current.rootNavigator
@@ -40,9 +38,11 @@ fun MorePage(moreViewModel: MoreViewModel = hiltViewModel()) {
 
     LazyColumn {
       item {
-        Box(modifier = Modifier
-          .fillMaxWidth()
-          .height(screenSize.second / 4)) {
+        Box(
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(screenSize.second / 4)
+        ) {
           Image(
             painter = painterResource(R.drawable.ic_launcher_foreground),
             contentDescription = null,
@@ -53,13 +53,17 @@ fun MorePage(moreViewModel: MoreViewModel = hiltViewModel()) {
       item { HorizontalDivider() }
       item {
         ListItem(modifier = Modifier.padding(top = 8.dp), leadingContent = {
-          Icon(Icons.Rounded.CloudOff,
+          Icon(
+            Icons.Rounded.CloudOff,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
-          Text("Downloaded only",
+          Text(
+            "Downloaded only",
             fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold)
+            fontWeight = FontWeight.SemiBold
+          )
         }, supportingContent = {
           Text("Filter all entries in your library", fontSize = 12.sp)
         }, trailingContent = {
@@ -70,13 +74,17 @@ fun MorePage(moreViewModel: MoreViewModel = hiltViewModel()) {
       }
       item {
         ListItem(modifier = Modifier.padding(bottom = 8.dp), leadingContent = {
-          Icon(Icons.Rounded.HistoryToggleOff,
+          Icon(
+            Icons.Rounded.HistoryToggleOff,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
-          Text("Incognito mode",
+          Text(
+            "Incognito mode",
             fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold)
+            fontWeight = FontWeight.SemiBold
+          )
         }, supportingContent = {
           Text("Pauses reading history", fontSize = 12.sp)
         }, trailingContent = {
@@ -88,51 +96,65 @@ fun MorePage(moreViewModel: MoreViewModel = hiltViewModel()) {
       item { HorizontalDivider() }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.Download,
+          Icon(
+            Icons.Rounded.Download,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
-          Text("Download queue",
+          Text(
+            "Download queue",
             fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold)
+            fontWeight = FontWeight.SemiBold
+          )
         })
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.AutoMirrored.Rounded.Label,
+          Icon(
+            Icons.AutoMirrored.Rounded.Label,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Categories", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         })
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.QueryStats,
+          Icon(
+            Icons.Rounded.QueryStats,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Statistics", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         })
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.SettingsBackupRestore,
+          Icon(
+            Icons.Rounded.SettingsBackupRestore,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
-          Text("Backup and restore",
+          Text(
+            "Backup and restore",
             fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold)
+            fontWeight = FontWeight.SemiBold
+          )
         })
       }
       item { HorizontalDivider() }
       item {
         ListItem(modifier = Modifier.clickable { rootNavigator.navigate("settings") },
           leadingContent = {
-            Icon(Icons.Rounded.Settings,
+            Icon(
+              Icons.Rounded.Settings,
               null,
-              tint = MaterialTheme.colorScheme.primary)
+              tint = MaterialTheme.colorScheme.primary
+            )
           },
           headlineContent = {
             Text("Settings", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
@@ -140,18 +162,22 @@ fun MorePage(moreViewModel: MoreViewModel = hiltViewModel()) {
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.Info,
+          Icon(
+            Icons.Rounded.Info,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("About", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         })
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.AutoMirrored.Rounded.Help,
+          Icon(
+            Icons.AutoMirrored.Rounded.Help,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Help", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         })

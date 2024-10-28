@@ -1,19 +1,19 @@
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.android)
-  alias(libs.plugins.kotlin.serialization)
-  id("kotlin-kapt")
+  alias(libs.plugins.compose.compiler)
+  id("com.google.devtools.ksp")
   id("com.google.dagger.hilt.android")
 }
 
 android {
   namespace = "com.fln.mangadex"
-  compileSdk = 34
+  compileSdk = 35
 
   defaultConfig {
     applicationId = "com.fln.mangadex"
     minSdk = 24
-    targetSdk = 34
+    targetSdk = 35
     versionCode = 1
     versionName = "1.0"
 
@@ -26,7 +26,8 @@ android {
       isMinifyEnabled = false
       proguardFiles(
         getDefaultProguardFile("proguard-android-optimize.txt"),
-        "proguard-rules.pro")
+        "proguard-rules.pro"
+      )
     }
   }
   compileOptions {
@@ -35,31 +36,28 @@ android {
   }
   kotlinOptions { jvmTarget = "1.8" }
   buildFeatures { compose = true }
-  composeOptions { kotlinCompilerExtensionVersion = "1.5.1" }
   packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
 }
 
 dependencies {
-  implementation(libs.androidx.core.ktx)
-  implementation(libs.androidx.lifecycle.runtime.ktx)
-  implementation(libs.androidx.activity.compose)
-  implementation(platform(libs.androidx.compose.bom))
-  implementation(libs.androidx.ui)
-  implementation(libs.androidx.ui.graphics)
-  implementation(libs.androidx.ui.tooling.preview)
-  implementation(libs.androidx.material3)
-  implementation(libs.androidx.navigation.runtime.ktx)
-  debugImplementation(libs.androidx.ui.tooling)
-  debugImplementation(libs.androidx.ui.test.manifest)
+  implementation(platform(libs.compose.bom))
+  implementation(libs.ui)
+  implementation(libs.material3)
+  implementation(libs.ui.tooling)
+  implementation(libs.runtime)
 
-  implementation(libs.androidx.navigation.compose)
-  implementation(libs.androidx.material.icons.extended)
-  implementation(libs.kotlinx.serialization.json)
-  implementation(libs.androidx.datastore.preferences)
-  implementation(libs.androidx.lifecycle.livedata.ktx)
+  implementation(libs.activity.compose)
+  implementation(libs.navigation.compose)
+  implementation(libs.datastore.preferences)
+  implementation(libs.hilt.navigation.compose)
+  implementation(libs.material.icons.extended)
+  implementation(libs.biometric)
+
   implementation(libs.hilt.android)
-  kapt(libs.hilt.android.compiler)
-  implementation(libs.androidx.hilt.navigation.compose)
+  ksp(libs.hilt.android.compiler)
 }
-
-kapt { correctErrorTypes = true }
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}

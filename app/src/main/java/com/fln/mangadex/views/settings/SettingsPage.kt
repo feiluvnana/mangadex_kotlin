@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fln.mangadex.LocalValuesProvider
@@ -33,9 +32,11 @@ fun SettingsPage() {
     LazyColumn(modifier = Modifier.padding(innerPadding)) {
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.Tune,
+          Icon(
+            Icons.Rounded.Tune,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("General", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }, supportingContent = {
@@ -44,9 +45,11 @@ fun SettingsPage() {
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.Palette,
+          Icon(
+            Icons.Rounded.Palette,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Appearance", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }, supportingContent = {
@@ -55,9 +58,11 @@ fun SettingsPage() {
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.CollectionsBookmark,
+          Icon(
+            Icons.Rounded.CollectionsBookmark,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Library", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }, supportingContent = {
@@ -66,9 +71,11 @@ fun SettingsPage() {
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.AutoMirrored.Rounded.ChromeReaderMode,
+          Icon(
+            Icons.AutoMirrored.Rounded.ChromeReaderMode,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Reader", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }, supportingContent = {
@@ -77,9 +84,11 @@ fun SettingsPage() {
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.Download,
+          Icon(
+            Icons.Rounded.Download,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Download", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }, supportingContent = {
@@ -88,9 +97,11 @@ fun SettingsPage() {
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.Sync,
+          Icon(
+            Icons.Rounded.Sync,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Tracking", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }, supportingContent = {
@@ -99,9 +110,11 @@ fun SettingsPage() {
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.Explore,
+          Icon(
+            Icons.Rounded.Explore,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Browse", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }, supportingContent = {
@@ -110,22 +123,28 @@ fun SettingsPage() {
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.SettingsBackupRestore,
+          Icon(
+            Icons.Rounded.SettingsBackupRestore,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
-          Text("Backup and restore",
+          Text(
+            "Backup and restore",
             fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold)
+            fontWeight = FontWeight.SemiBold
+          )
         }, supportingContent = {
           Text("Manual & automatic backups", fontSize = 12.sp)
         })
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.Security,
+          Icon(
+            Icons.Rounded.Security,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Security", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }, supportingContent = {
@@ -134,9 +153,11 @@ fun SettingsPage() {
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.Code,
+          Icon(
+            Icons.Rounded.Code,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("Advanced", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }, supportingContent = {
@@ -145,25 +166,17 @@ fun SettingsPage() {
       }
       item {
         ListItem(leadingContent = {
-          Icon(Icons.Rounded.Info,
+          Icon(
+            Icons.Rounded.Info,
             null,
-            tint = MaterialTheme.colorScheme.primary)
+            tint = MaterialTheme.colorScheme.primary
+          )
         }, headlineContent = {
           Text("About", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }, supportingContent = {
           Text("Tachiyomi Stable 0.14.3", fontSize = 12.sp)
         })
       }
-    }
-  }
-}
-
-@Preview
-@Composable
-fun SettingsPagePreview() {
-  MaterialTheme(colorScheme = darkColorScheme()) {
-    Surface {
-      SettingsPage()
     }
   }
 }

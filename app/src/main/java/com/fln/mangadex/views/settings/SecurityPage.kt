@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,7 +23,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
-  val rootNavigator = LocalValuesProvider.current.rootNavigator!!
+  val rootNavigator = LocalValuesProvider.current.rootNavigator
   val moreState by moreViewModel.state.collectAsState()
 
   Scaffold(topBar = {
@@ -58,16 +57,21 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
           modifier = Modifier.clickable { rootNavigator.navigate("secure_screen") })
       }
       item {
-        Icon(Icons.Outlined.Info,
+        Icon(
+          Icons.Outlined.Info,
           null,
           modifier = Modifier
             .padding(horizontal = 16.dp)
-            .size(20.dp))
+            .size(20.dp)
+        )
       }
       item {
-        Text("Secure screen hides app contents when switching apps and block screenshots",
+        Text(
+          "Secure screen hides app contents when switching apps and block screenshots",
           fontSize = 12.sp,
-          modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+          lineHeight = 12.sp,
+          modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
       }
     }
   }
@@ -76,7 +80,7 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SecureScreenModeSelectionDialog(moreViewModel: MoreViewModel = hiltViewModel()) {
-  val rootNavigator = LocalValuesProvider.current.rootNavigator!!
+  val rootNavigator = LocalValuesProvider.current.rootNavigator
   val moreState by moreViewModel.state.collectAsState()
   val coroutineScope = rememberCoroutineScope()
 
@@ -84,20 +88,26 @@ fun SecureScreenModeSelectionDialog(moreViewModel: MoreViewModel = hiltViewModel
     content = {
       Surface(shape = RoundedCornerShape(24.dp)) {
         Column(modifier = Modifier.padding(16.dp)) {
-          Text("Security",
+          Text(
+            "Security",
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(bottom = 8.dp))
+            modifier = Modifier.padding(bottom = 8.dp)
+          )
           for (ssm in SecureScreenMode.entries) {
             Row {
               RadioButton(selected = moreState.secureScreen == ssm, onClick = {
                 coroutineScope.launch { moreViewModel.setSecureScreen(ssm) }
               }, modifier = Modifier.align(Alignment.CenterVertically))
-              Text(ssm.name,
-                modifier = Modifier.align(Alignment.CenterVertically))
+              Text(
+                ssm.name,
+                modifier = Modifier.align(Alignment.CenterVertically)
+              )
             }
           }
-          TextButton(modifier = Modifier.padding(top = 8.dp).align(Alignment.End),
+          TextButton(modifier = Modifier
+            .padding(top = 8.dp)
+            .align(Alignment.End),
             onClick = { rootNavigator.popBackStack() }) { Text("Cancel") }
         }
       }
