@@ -11,9 +11,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fln.mangadex.LocalValuesProvider
 import com.fln.mangadex.core.models.SecureScreenMode
@@ -25,6 +27,8 @@ import kotlinx.coroutines.launch
 fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
   val rootNavigator = LocalValuesProvider.current.rootNavigator
   val moreState by moreViewModel.state.collectAsState()
+  val coroutineScope = rememberCoroutineScope()
+  val fragmentActivity = LocalContext.current as FragmentActivity
 
   Scaffold(topBar = {
     TopAppBar(navigationIcon = {
@@ -39,10 +43,10 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
       item {
         ListItem(headlineContent = { Text("Require unlock", fontSize = 14.sp) },
           trailingContent = {
-            Switch(checked = true, onCheckedChange = {
-              //moreViewModel.biometricRepository.biometricPrompt.authenticate(
-              //  moreViewModel.biometricRepository.biometricPromptInfo
-              //)
+            Switch(checked = moreState.requireUnlock, onCheckedChange = {
+              coroutineScope.launch {
+                moreViewModel.toggleRequireUnlock()
+              }
             })
           })
       }
@@ -76,7 +80,11 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
           "Secure screen hides app contents when switching apps and block screenshots",
           fontSize = 12.sp,
           lineHeight = 12.sp,
-          modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+          modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable {
+              moreViewModel.biometricRepository.authenticate(fragmentActivity)
+            }
         )
       }
     }

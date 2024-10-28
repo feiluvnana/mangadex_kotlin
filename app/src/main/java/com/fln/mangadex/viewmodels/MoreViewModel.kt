@@ -3,6 +3,7 @@ package com.fln.mangadex.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fln.mangadex.core.models.SecureScreenMode
+import com.fln.mangadex.core.repositories.auth.BiometricRepository
 import com.fln.mangadex.core.repositories.local.DatastoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -19,7 +20,8 @@ data class MoreState(
 @HiltViewModel
 class MoreViewModel
 @Inject constructor(
-  private val datastoreService: DatastoreRepository
+  private val datastoreService: DatastoreRepository,
+  val biometricRepository: BiometricRepository
 ) :
   ViewModel() {
   private val _state = MutableStateFlow(

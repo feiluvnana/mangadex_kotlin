@@ -30,13 +30,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.fln.mangadex.core.models.SecureScreenMode
-import com.fln.mangadex.core.repositories.auth.BiometricRepository
 import com.fln.mangadex.theme.AppTheme
 import com.fln.mangadex.viewmodels.MoreViewModel
 import com.fln.mangadex.views.home.HomePage
 import com.fln.mangadex.views.settings.*
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @SuppressLint("CompositionLocalNaming")
 val LocalValuesProvider =
@@ -49,10 +47,6 @@ data class LocalValues(
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
-
-  @Inject
-  lateinit var biometricRepository: BiometricRepository
-
   @RequiresApi(Build.VERSION_CODES.P)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -62,7 +56,7 @@ class MainActivity : FragmentActivity() {
     setContent {
       val moreViewModel: MoreViewModel = hiltViewModel()
       val moreState by moreViewModel.state.collectAsStateWithLifecycle()
-      val lifecycleOwner = LocalLifecycleOwner.current
+      LocalLifecycleOwner.current
 
 
       val downloadedOnlyDp by animateDpAsState(
