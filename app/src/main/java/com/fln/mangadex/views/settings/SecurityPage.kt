@@ -15,9 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fln.mangadex.LocalValuesProvider
+import com.fln.mangadex.MainActivity
 import com.fln.mangadex.core.models.SecureScreenMode
 import com.fln.mangadex.viewmodels.MoreViewModel
 import kotlinx.coroutines.launch
@@ -28,7 +28,7 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
   val rootNavigator = LocalValuesProvider.current.rootNavigator
   val moreState by moreViewModel.state.collectAsState()
   val coroutineScope = rememberCoroutineScope()
-  val fragmentActivity = LocalContext.current as FragmentActivity
+  val mainActivity = LocalContext.current as MainActivity
 
   Scaffold(topBar = {
     TopAppBar(navigationIcon = {
@@ -44,9 +44,14 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
         ListItem(headlineContent = { Text("Require unlock", fontSize = 14.sp) },
           trailingContent = {
             Switch(checked = moreState.requireUnlock, onCheckedChange = {
-              coroutineScope.launch {
-                moreViewModel.toggleRequireUnlock()
-              }
+              moreViewModel.biometricRepository.authenticate(
+                mainActivity,
+                onSuccess = {
+                  coroutineScope.launch {
+                    moreViewModel.toggleRequireUnlock()
+                  }
+                })
+
             })
           })
       }
@@ -82,9 +87,7 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
           lineHeight = 12.sp,
           modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable {
-              moreViewModel.biometricRepository.authenticate(fragmentActivity)
-            }
+
         )
       }
     }

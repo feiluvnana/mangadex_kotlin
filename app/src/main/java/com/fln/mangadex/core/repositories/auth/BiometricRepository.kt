@@ -1,15 +1,20 @@
 package com.fln.mangadex.core.repositories.auth
 
-import android.util.Log
+import android.app.Activity
+import android.app.KeyguardManager
+import android.content.Context
+import android.os.Build.VERSION
 import android.widget.Toast
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
+import com.fln.mangadex.MainActivity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.takeWhile
 import javax.inject.Singleton
 
 @Module
@@ -23,92 +28,75 @@ object BiometricModule {
 }
 
 class BiometricRepository {
-  fun authenticate(activity: FragmentActivity) {
+  fun authenticate(
+    activity: MainActivity,
+    onSuccess: () -> Unit
+  ) {
+    if (VERSION.SDK_INT <= 29) authenticateForApi29AndLower(activity, onSuccess)
+  }
+
+  private fun authenticateForApi29AndLower(
+    activity: MainActivity,
+    onSuccess: () -> Unit
+  ) {
     try {
-      Log.d("BiometricDebug", "Starting authentication process")
-
+      val coroutineScope = CoroutineScope(Dispatchers.Main)
       val executor = ContextCompat.getMainExecutor(activity)
-      Log.d("BiometricDebug", "Executor created")
-
-      // Check biometric availability
       val biometricManager = BiometricManager.from(activity)
-      val canAuthenticate =
+      val canAuthenticateByBiometric =
         biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
-
-      Log.d("BiometricDebug", "Can authenticate result: $canAuthenticate")
-
-      when (canAuthenticate) {
+      val keyguardManager =
+        activity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+      val canAuthenticateByKeyguard = keyguardManager.isDeviceSecure
+      when (canAuthenticateByBiometric) {
         BiometricManager.BIOMETRIC_SUCCESS -> {
-          Log.d("BiometricDebug", "Biometric is available")
-
           val callback = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(
               errorCode: Int,
               errString: CharSequence
             ) {
-              super.onAuthenticationError(errorCode, errString)
-              Log.d("BiometricDebug", "Error: $errorCode - $errString")
-              activity.runOnUiThread {
-                Toast.makeText(activity, errString, Toast.LENGTH_SHORT).show()
+              if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON && canAuthenticateByKeyguard) {
+                val intent =
+                  keyguardManager.createConfirmDeviceCredentialIntent(
+                    "Require unlock",
+                    "Please enter your password"
+                  )
+                activity.startActivityForResultLauncher.launch(intent)
+                val flow = activity.startActivityResultFlow.takeWhile { false }
+                coroutineScope.launch {
+                  flow.collect {
+                    if (it?.resultCode == Activity.RESULT_OK) onSuccess()
+                  }
+                }
               }
+              Toast.makeText(activity, errString, Toast.LENGTH_SHORT).show()
             }
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-              super.onAuthenticationSucceeded(result)
-              Log.d("BiometricDebug", "Authentication succeeded")
-              activity.runOnUiThread {
-                Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()
-              }
+              onSuccess()
             }
 
             override fun onAuthenticationFailed() {
-              super.onAuthenticationFailed()
-              Log.d("BiometricDebug", "Authentication failed")
-              activity.runOnUiThread {
-                Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show()
-              }
+              Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show()
             }
           }
 
-          Log.d("BiometricDebug", "Creating BiometricPrompt")
           val biometricPrompt = BiometricPrompt(activity, executor, callback)
-
-          Log.d("BiometricDebug", "Creating PromptInfo")
           val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Biometric Authentication")
+            .setTitle("Require unlock")
             .setSubtitle("Authenticate to continue")
-            .setNegativeButtonText("Use password instead")
+            .setNegativeButtonText(if (canAuthenticateByKeyguard) "Use password instead" else "Cancel")
             .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
             .build()
-
-          Log.d("BiometricDebug", "Calling authenticate()")
           biometricPrompt.authenticate(promptInfo)
-          Log.d("BiometricDebug", "authenticate() called")
-        }
-
-        BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
-          Log.e("BiometricDebug", "No biometric hardware")
-          Toast.makeText(activity, "No biometric hardware", Toast.LENGTH_SHORT)
-            .show()
-        }
-
-        BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
-          Log.e("BiometricDebug", "No biometrics enrolled")
-          Toast.makeText(
-            activity,
-            "No biometrics enrolled. Please enroll in Settings",
-            Toast.LENGTH_LONG
-          ).show()
         }
 
         else -> {
-          Log.e("BiometricDebug", "Biometric error: $canAuthenticate")
           Toast.makeText(activity, "Cannot use biometrics", Toast.LENGTH_SHORT)
             .show()
         }
       }
     } catch (e: Exception) {
-      Log.e("BiometricDebug", "Exception during authentication", e)
       Toast.makeText(activity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
     }
   }

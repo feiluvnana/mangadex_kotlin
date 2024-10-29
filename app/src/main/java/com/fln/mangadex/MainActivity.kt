@@ -8,6 +8,8 @@ import android.view.WindowManager
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -35,6 +37,8 @@ import com.fln.mangadex.viewmodels.MoreViewModel
 import com.fln.mangadex.views.home.HomePage
 import com.fln.mangadex.views.settings.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @SuppressLint("CompositionLocalNaming")
 val LocalValuesProvider =
@@ -47,6 +51,16 @@ data class LocalValues(
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
+  val startActivityResultFlow: MutableStateFlow<ActivityResult?> =
+    MutableStateFlow(null)
+  val startActivityForResultLauncher = registerForActivityResult(
+    ActivityResultContracts.StartActivityForResult()
+  ) {
+    CoroutineScope(Dispatchers.Main).launch {
+      startActivityResultFlow.emit(it)
+    }
+  }
+
   @RequiresApi(Build.VERSION_CODES.P)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
