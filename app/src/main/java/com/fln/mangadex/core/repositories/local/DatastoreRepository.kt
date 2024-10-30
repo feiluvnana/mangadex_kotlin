@@ -34,6 +34,7 @@ class DatastoreRepository
     val INCOGNITO_MODE = booleanPreferencesKey("incognito_mode")
     val SECURE_SCREEN = stringPreferencesKey("secure_screen")
     val REQUIRE_UNLOCK = booleanPreferencesKey("require_unlock")
+    val LOCK_WHEN_IDLE = stringPreferencesKey("lock_when_idle")
   }
 
   suspend fun <T> set(key: Preferences.Key<T>, value: T) {

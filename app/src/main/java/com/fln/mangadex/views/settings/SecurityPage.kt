@@ -17,8 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fln.mangadex.LocalValuesProvider
-import com.fln.mangadex.MainActivity
+import com.fln.mangadex.core.models.LockWhenIdleMode
 import com.fln.mangadex.core.models.SecureScreenMode
+import com.fln.mangadex.utils.getActivity
 import com.fln.mangadex.viewmodels.MoreViewModel
 import kotlinx.coroutines.launch
 
@@ -28,7 +29,7 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
   val rootNavigator = LocalValuesProvider.current.rootNavigator
   val moreState by moreViewModel.state.collectAsState()
   val coroutineScope = rememberCoroutineScope()
-  val mainActivity = LocalContext.current as MainActivity
+  val mainActivity = LocalContext.current.getActivity()
 
   Scaffold(topBar = {
     TopAppBar(navigationIcon = {
@@ -44,21 +45,24 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
         ListItem(headlineContent = { Text("Require unlock", fontSize = 14.sp) },
           trailingContent = {
             Switch(checked = moreState.requireUnlock, onCheckedChange = {
-              moreViewModel.biometricRepository.authenticate(
-                mainActivity,
+              mainActivity.startBiometricActivity(
                 onSuccess = {
-                  coroutineScope.launch {
-                    moreViewModel.toggleRequireUnlock()
-                  }
+                  coroutineScope.launch { moreViewModel.toggleRequireUnlock() }
                 })
-
             })
           })
       }
-      item {
-        ListItem(headlineContent = { Text("Lock when idle", fontSize = 14.sp) },
-          supportingContent = { Text("Always", fontSize = 12.sp) })
-      }
+      if (moreState.requireUnlock)
+        item {
+          ListItem(
+            headlineContent = {
+              Text("Lock when idle", fontSize = 14.sp)
+            },
+            supportingContent = {
+              Text(moreState.lockWhenIdle.name, fontSize = 12.sp)
+            },
+            modifier = Modifier.clickable { rootNavigator.navigate("lock_when_idle") })
+        }
       item {
         ListItem(headlineContent = {
           Text("Hide notification content", fontSize = 14.sp)
@@ -118,6 +122,49 @@ fun SecureScreenModeSelectionDialog(moreViewModel: MoreViewModel = hiltViewModel
               }, modifier = Modifier.align(Alignment.CenterVertically))
               Text(
                 ssm.name,
+                modifier = Modifier.align(Alignment.CenterVertically)
+              )
+            }
+          }
+          TextButton(modifier = Modifier
+            .padding(top = 8.dp)
+            .align(Alignment.End),
+            onClick = { rootNavigator.popBackStack() }) { Text("Cancel") }
+        }
+      }
+    })
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LockWhenIdleModeSelectionDialog(moreViewModel: MoreViewModel = hiltViewModel()) {
+  val rootNavigator = LocalValuesProvider.current.rootNavigator
+  val moreState by moreViewModel.state.collectAsState()
+  val coroutineScope = rememberCoroutineScope()
+  val mainActivity = LocalContext.current.getActivity()
+
+  BasicAlertDialog(onDismissRequest = { rootNavigator.popBackStack() },
+    content = {
+      Surface(shape = RoundedCornerShape(24.dp)) {
+        Column(modifier = Modifier.padding(16.dp)) {
+          Text(
+            "Security",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(bottom = 8.dp)
+          )
+          for (lwim in LockWhenIdleMode.entries) {
+            Row {
+              RadioButton(selected = moreState.lockWhenIdle == lwim, onClick = {
+                mainActivity.startBiometricActivity(onSuccess = {
+                  coroutineScope.launch {
+                    moreViewModel.setLockWhenIdle(lwim)
+                    rootNavigator.popBackStack()
+                  }
+                })
+              }, modifier = Modifier.align(Alignment.CenterVertically))
+              Text(
+                lwim.name,
                 modifier = Modifier.align(Alignment.CenterVertically)
               )
             }
