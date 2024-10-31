@@ -45,24 +45,21 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
         ListItem(headlineContent = { Text("Require unlock", fontSize = 14.sp) },
           trailingContent = {
             Switch(checked = moreState.requireUnlock, onCheckedChange = {
-              mainActivity.startBiometricActivity(
-                onSuccess = {
-                  coroutineScope.launch { moreViewModel.toggleRequireUnlock() }
-                })
+              mainActivity.startBiometricActivity(onSuccess = {
+                coroutineScope.launch { moreViewModel.toggleRequireUnlock() }
+              })
             })
           })
       }
-      if (moreState.requireUnlock)
-        item {
-          ListItem(
-            headlineContent = {
-              Text("Lock when idle", fontSize = 14.sp)
-            },
-            supportingContent = {
-              Text(moreState.lockWhenIdle.name, fontSize = 12.sp)
-            },
-            modifier = Modifier.clickable { rootNavigator.navigate("lock_when_idle") })
-        }
+      if (moreState.requireUnlock) item {
+        ListItem(headlineContent = {
+          Text("Lock when idle", fontSize = 14.sp)
+        },
+          supportingContent = {
+            Text(moreState.lockWhenIdle.name, fontSize = 12.sp)
+          },
+          modifier = Modifier.clickable { rootNavigator.navigate("lock_when_idle") })
+      }
       item {
         ListItem(headlineContent = {
           Text("Hide notification content", fontSize = 14.sp)
@@ -76,23 +73,17 @@ fun SecurityPage(moreViewModel: MoreViewModel = hiltViewModel()) {
           modifier = Modifier.clickable { rootNavigator.navigate("secure_screen") })
       }
       item {
-        Icon(
-          Icons.Outlined.Info,
+        Icon(Icons.Outlined.Info,
           null,
           modifier = Modifier
             .padding(horizontal = 16.dp)
-            .size(20.dp)
-        )
+            .size(20.dp))
       }
       item {
-        Text(
-          "Secure screen hides app contents when switching apps and block screenshots",
+        Text("Secure screen hides app contents when switching apps and block screenshots",
           fontSize = 12.sp,
           lineHeight = 12.sp,
-          modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-
-        )
+          modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
       }
     }
   }
@@ -109,21 +100,17 @@ fun SecureScreenModeSelectionDialog(moreViewModel: MoreViewModel = hiltViewModel
     content = {
       Surface(shape = RoundedCornerShape(24.dp)) {
         Column(modifier = Modifier.padding(16.dp)) {
-          Text(
-            "Security",
+          Text("Security",
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(bottom = 8.dp)
-          )
+            modifier = Modifier.padding(bottom = 8.dp))
           for (ssm in SecureScreenMode.entries) {
             Row {
               RadioButton(selected = moreState.secureScreen == ssm, onClick = {
                 coroutineScope.launch { moreViewModel.setSecureScreen(ssm) }
               }, modifier = Modifier.align(Alignment.CenterVertically))
-              Text(
-                ssm.name,
-                modifier = Modifier.align(Alignment.CenterVertically)
-              )
+              Text(ssm.name,
+                modifier = Modifier.align(Alignment.CenterVertically))
             }
           }
           TextButton(modifier = Modifier
@@ -147,12 +134,10 @@ fun LockWhenIdleModeSelectionDialog(moreViewModel: MoreViewModel = hiltViewModel
     content = {
       Surface(shape = RoundedCornerShape(24.dp)) {
         Column(modifier = Modifier.padding(16.dp)) {
-          Text(
-            "Security",
+          Text("Security",
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(bottom = 8.dp)
-          )
+            modifier = Modifier.padding(bottom = 8.dp))
           for (lwim in LockWhenIdleMode.entries) {
             Row {
               RadioButton(selected = moreState.lockWhenIdle == lwim, onClick = {
@@ -163,10 +148,8 @@ fun LockWhenIdleModeSelectionDialog(moreViewModel: MoreViewModel = hiltViewModel
                   }
                 })
               }, modifier = Modifier.align(Alignment.CenterVertically))
-              Text(
-                lwim.name,
-                modifier = Modifier.align(Alignment.CenterVertically)
-              )
+              Text(lwim.name,
+                modifier = Modifier.align(Alignment.CenterVertically))
             }
           }
           TextButton(modifier = Modifier

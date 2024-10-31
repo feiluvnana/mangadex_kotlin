@@ -17,27 +17,22 @@ import kotlinx.coroutines.launch
 class BiometricActivity : FragmentActivity() {
   val startActivityResultFlow: MutableStateFlow<ActivityResult?> =
     MutableStateFlow(null)
-  val startActivityForResultLauncher = registerForActivityResult(
-    ActivityResultContracts.StartActivityForResult()
-  ) {
-    lifecycleScope.launch {
-      startActivityResultFlow.emit(it)
+  val startActivityForResultLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+      lifecycleScope.launch {
+        startActivityResultFlow.emit(it)
+      }
     }
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    BiometricRepository.authenticate(
-      onCancelled = {
-        setResult(RESULT_CANCELED)
-        finish()
-      },
-      onSuccess = {
-        setResult(RESULT_OK)
-        finish()
-      }, this
-    )
-    Thread.setDefaultUncaughtExceptionHandler { _, _ -> }
+    BiometricRepository.authenticate(onCancelled = {
+      setResult(RESULT_CANCELED)
+      finish()
+    }, onSuccess = {
+      setResult(RESULT_OK)
+      finish()
+    }, this)
     setContent {
       AppTheme {
         Surface { }

@@ -28,8 +28,7 @@ class DatastoreRepository
 @Inject constructor(@ApplicationContext private val context: Context) {
   companion object {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
-      name = "mangadex_datastore"
-    )
+      name = "mangadex_datastore")
     val DOWNLOADED_ONLY = booleanPreferencesKey("downloaded_only")
     val INCOGNITO_MODE = booleanPreferencesKey("incognito_mode")
     val SECURE_SCREEN = stringPreferencesKey("secure_screen")
